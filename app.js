@@ -10,7 +10,7 @@ const rl = readline.createInterface({
 });
 
 // const mangaURL =
-//   'http://www.mangareader.net/its-not-my-fault-that-im-not-popular/1';
+//   'https://www.mangareader.net/one-piece/941;
 
 function start(URL) {
   request(URL, (error, response, html) => {
