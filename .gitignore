@@ -92,7 +92,7 @@ typings/
 # dotenv environment variables file
 .env
 
-#git
+# git
 .gitattributes
 
 
