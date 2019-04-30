@@ -1,7 +1,7 @@
 # Scraper
 Node.JS App
 
-Sourced from *https://www.mangareader.net/*
+Data source from *https://www.mangareader.net/*
 
 ## Local
 * Run ```npm install``` or ```yarn```
