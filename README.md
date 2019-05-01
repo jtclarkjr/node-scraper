@@ -1,5 +1,5 @@
 # Scraper
-Node.JS tool
+Node.JS tool that downloads manga (command terminal)
 
 Data source from *https://www.mangareader.net/*
 
