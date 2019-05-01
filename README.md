@@ -1,5 +1,5 @@
 # Scraper
-Node.JS App
+Node.JS tool
 
 Data source from *https://www.mangareader.net/*
 
