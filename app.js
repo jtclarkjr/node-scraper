@@ -9,44 +9,49 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 
-//const mangaURL =
-//  'https://www.mangareader.net/one-piece/941';
+//  'https://w13.mangafreak.net/Read1_One_Piece_1';
 
-function start(URL) {
+start = (URL) => {
   request(URL, (error, response, html) => {
     if (!error) {
       const $ = cheerio.load(html);
-      const noOfPages = $('#pageMenu > option:nth-last-child(1)').text();
+      const noOfPages = $('#select > option:nth-last-child(1)').text();
       console.log('Number of pages: ' + noOfPages);
-      const path = './' + $('#mangainfo > div:nth-child(1) > h1').text();
+
+      // TODO: clean up selectors
+      const chapterSelector = $('body > div.god_box > div.main > div > div > div.top_section > div > div:nth-child(1) > strong').text();
+      const title = $('body > div.god_box > div.main > div > div > div.top_section > article > h1 > a').text();
+      const path = './' + $('body > div.god_box > div.main > div > div > div.top_section > article > h1 > a').text();
+      const name = title.split(' ').join('_').toLowerCase();
+      const chapter = chapterSelector.split(' ').pop();
       if (!fs.existsSync(path)) {
-        mkdirp(path, function(err) {
+        mkdirp(path, (err) => {
           if (err) console.error(err);
           else console.log('Manga will be save at: ' + path);
         });
       }
+
       let i;
       for (i = 1; i <= noOfPages; i++) {
         const nowPath = path + '/' + i + '.jpg';
         const nowURL = URL + '/' + i;
-        saveImage(nowURL, nowPath);
+        saveImage(nowURL, nowPath, name, chapter, i);
       }
     }
   });
 }
 
-function saveImage(URL, path) {
+saveImage = (URL, path, name, chapter, page) => {
   request(URL, (error, response, html) => {
     if (!error) {
-      var $ = cheerio.load(html);
-      const imgURL = $('#imgholder a #img').attr('src');
+      const imgURL = `https://images.mangafreak.net/mangas/${name}/${name}_${chapter}/${name}_${chapter}_${page}.jpg`
       request.get(
         {
           url: imgURL,
           encoding: 'binary'
         },
-        function(err, response, body) {
-          fs.writeFile(path, body, 'binary', function(err) {
+        (err, response, body) => {
+          fs.writeFile(path, body, 'binary', (err) => {
             if (err) console.log(err);
             else console.log(path + ' saved!');
           });
@@ -58,7 +63,7 @@ function saveImage(URL, path) {
   });
 }
 
-rl.question('Enter the manga url: ', answer => {
+rl.question('Enter the manga chapter (mangafreak url): ', answer => {
   console.log(`URL entered: ${answer}`);
   rl.close();
   start(answer);
